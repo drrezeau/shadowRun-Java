@@ -45,34 +45,43 @@ public class Character {
     ArrayList<RangedWeapon> rangedWeapons;
     ArrayList<Armor> armor;
     
-    public String getPlayer() {
-        return player;
-    }
-
     
-    void addNewSkill() {
+    Character() {
+        skills = new ArrayList();
+        positiveQualities = new ArrayList();
+    }
+    
+     void addNewSkill() {
         Scanner user_input = new Scanner( System.in );
         
-        String name;
+        String skillName;
         Integer rating;
         
         System.out.println("What is the name of the skill?");
         System.out.print(">");
-        name = user_input.next();
+        skillName = user_input.nextLine();
         
         System.out.println("What is the rating?");
         System.out.print(">");
         rating = Integer.parseInt(user_input.next());
         Skill skill = new Skill();
-        skill.addSkill(name, rating);
+        skill.addSkill(skillName, rating);
+//        skill.display();
         skills.add(skill);
     }
-    boolean empty() {
-        if(player == null) {
-            return true;
+    
+    void displaySkills() {
+        int length = skills.size();
+        for (int i = 0; i < length; i++) {
+//            System.out.println("Skill: " + skills.get(i).getSkill() + " Rating: " + skills.get(i).getRating());
+            skills.get(i).display();
         }
-        return false;
     }
+    
+    public String getPlayer() {
+        return player;
+    }
+    
     public String getName() {
         return name;
     }
@@ -143,11 +152,21 @@ public class Character {
         this.edge = edge;
     }
     
-    Character() {
+    void createCharacter() {
         Scanner user_input = new Scanner( System.in );
         
         System.out.print("What is your name? ");
-        this.player = user_input.next();
+        this.player = user_input.nextLine();
         
+    }
+    
+    void saveToDB() {
+        String skillsToSave = "";
+        
+        for (int i = 0; i < skills.size(); i++) {
+            skillsToSave += skills.get(i).prepareForDB() + ";";
+        }
+        
+//        System.out.println(skillsToSave);
     }
 }

@@ -31,7 +31,16 @@ public class Skill {
     void addSkill(String name, Integer rating) {
         this.skill = name;
         this.rating = rating;
-        System.out.println(this.skill + " " + this.rating);
     }
+    
+     void display() {
+         System.out.println("Skill: " + this.skill + " | Rating: " + this.rating);
+     }
+     
+     String prepareForDB() {
+         String skillToReturn = this.skill + ":" + this.rating;
+         
+         return skillToReturn;
+     }
     
 }
