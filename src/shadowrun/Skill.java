@@ -5,6 +5,8 @@
  */
 package shadowrun;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author David
@@ -28,7 +30,7 @@ public class Skill {
     }
     
     
-    void addSkill(String name, Integer rating) {
+    Skill(String name, Integer rating) {
         this.skill = name;
         this.rating = rating;
     }
@@ -41,6 +43,21 @@ public class Skill {
          String skillToReturn = this.skill + ":" + this.rating;
          
          return skillToReturn;
+     }
+     
+     ArrayList loadFromDB(String skillsFromDB) {
+         ArrayList<Skill> skillsToReturn = new ArrayList();
+         String skills[];// = new ArrayList();
+         
+         skills = skillsFromDB.split(";");
+         
+         for (int i =0; i < skills.length; i++) {
+             String skillsSplit[];
+             skillsSplit = skills[i].split(":");
+             Skill skill = new Skill(skillsSplit[0], Integer.parseInt(skillsSplit[1]));
+             skillsToReturn.add(skill);
+         }
+         return skillsToReturn;
      }
     
 }

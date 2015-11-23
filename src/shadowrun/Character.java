@@ -13,45 +13,89 @@ import java.util.Scanner;
  * @author David
  */
 public class Character {
-    String player;
-    String name;
-    String alias;
+    private String player;
+    private String name;
+    private String alias;
     
-    String metatype;
-    Integer age;
-    Integer height;
-    Integer weight;
-    Integer karma;
+    private String metatype;
+    private Integer age;
+    private Integer height;
+    private Integer weight;
+    private String sex;
+    private Integer karma;
     
-    Integer body;
-    Integer agility;
-    Integer reaction;
-    Integer strength;
-    Integer willpower;
-    Integer logic;
-    Integer intuition;
-    Integer charisma;
-    Integer edge;
+    private Integer body;
+    private Integer agility;
+    private Integer reaction;
+    private Integer strength;
+    private Integer willpower;
+    private Integer logic;
+    private Integer intuition;
+    private Integer charisma;
+    private Integer edge;
     
-    Integer essence;
-    boolean hasMagic;
-    Integer magic;
+    private Integer essence;
+    private boolean hasMagic;
+    private Integer magic;
     
-    ArrayList<Skill> skills;
-    ArrayList<Quality> positiveQualities;
-    ArrayList<Quality> negativeQualities;
-    ArrayList<Contacts> contacts;
-    ArrayList<MeleeWeapons> meleeWeapons;
-    ArrayList<RangedWeapon> rangedWeapons;
-    ArrayList<Armor> armor;
-    
+    private ArrayList<Skill> skills;
+    private ArrayList<Quality> qualities;
+    private ArrayList<Contacts> contacts;
+    private ArrayList<MeleeWeapons> meleeWeapons;
+    private ArrayList<RangedWeapon> rangedWeapons;
+    private ArrayList<Armor> armor;    
     
     Character() {
         skills = new ArrayList();
-        positiveQualities = new ArrayList();
+        qualities = new ArrayList();
+        contacts = new ArrayList();
     }
     
-     void addNewSkill() {
+    
+    void createCharacter() {
+        Scanner user_input = new Scanner( System.in );
+        
+        System.out.println("What is The player's name? ");
+        System.out.print(">");
+        this.player = user_input.nextLine();
+        
+        System.out.println("What Is the character's name?");
+        System.out.print(">");
+        this.name = user_input.nextLine();
+        
+        System.out.println("What is the character's alias?");
+        System.out.print(">");
+        this.alias = user_input.nextLine();
+        
+        System.out.println("What is the character's age?");
+        System.out.print(">");
+        this.age = Integer.parseInt(user_input.nextLine());
+
+        System.out.println("What is the character's Height(Inches)?");
+        System.out.print(">");
+        this.height = Integer.parseInt(user_input.nextLine());
+        
+        System.out.println("What is the character's Weight(Pounds)?");
+        System.out.print(">");
+        this.weight = Integer.parseInt(user_input.nextLine());
+
+        do {
+            System.out.println("Are you Male or Female?");
+            System.out.print(">");
+            this.sex = user_input.nextLine();
+        } while (!sex.equals("Male") || !sex.equals("Female"));
+        
+        System.out.println("What is the character's metatype?(Human, Elf, Dwarf, Ork, Troll)");
+        System.out.print(">");
+        this.sex = user_input.nextLine();
+
+
+    }
+    
+    /*******************************************************
+     *********** Functions for Adding new Traits ***********
+     *******************************************************/
+    void addNewSkill() {
         Scanner user_input = new Scanner( System.in );
         
         String skillName;
@@ -64,20 +108,123 @@ public class Character {
         System.out.println("What is the rating?");
         System.out.print(">");
         rating = Integer.parseInt(user_input.next());
-        Skill skill = new Skill();
-        skill.addSkill(skillName, rating);
-//        skill.display();
+        Skill skill = new Skill(skillName, rating);
         skills.add(skill);
     }
+    void addNewQuality() {
+         Scanner user_input = new Scanner( System.in );
+         
+         String qualityName;
+         String notes;
+         String positiveChar;
+         boolean positive = false;
+         
+         System.out.println("What is the name of the quality?");
+         System.out.print(">");
+         qualityName = user_input.nextLine();
+         System.out.println("Are there any notes to put with the quality?");
+         System.out.print(">");
+         notes = user_input.nextLine();
+         System.out.println("Is this a positive quality?(Y OR N)");
+         System.out.print(">");
+         positiveChar = user_input.next();
+         
+         if (positiveChar.toUpperCase().equals("Y")) {
+             positive = true;
+         }
+         
+         Quality quality = new Quality(qualityName, notes, positive);
+         qualities.add(quality);
+     }
     
+    /*******************************************************
+     *********** Functions for Displaying Traits ***********
+     *******************************************************/
     void displaySkills() {
         int length = skills.size();
         for (int i = 0; i < length; i++) {
 //            System.out.println("Skill: " + skills.get(i).getSkill() + " Rating: " + skills.get(i).getRating());
             skills.get(i).display();
         }
+        System.out.println();
+    }
+    void displayQualities() {
+        for (int i = 0; i < qualities.size(); i++) {
+            qualities.get(i).display();
+        }
+        System.out.println();
+    }
+        
+    void displayCharacter() {
+        System.out.println("Player's Name: " + this.player);
+        System.out.println("Character's Name: " + this.name);
+        System.out.println("Character's Alias: " + this.alias);
+        System.out.println("Character's Age: " + this.age);
+        System.out.println("Character's Height: " + this.height + "(inches)");
+        System.out.println("Character's Weight: " + this.weight + "(pounds)");
+        System.out.println("Character's Sex: " + this.sex);
+        
+
+        this.displaySkills();
+        this.displayQualities();
     }
     
+    /*****************************************************
+     ************* Functions For Database ****************
+     *****************************************************/
+    void saveToDB() {
+        String skillsToSave = "";
+        String qualitiesToSave = "";
+        String contactsToSave = "";
+        
+        for (int i = 0; i < skills.size(); i++) {
+            skillsToSave += skills.get(i).prepareForDB() + ";";
+        }
+        
+        System.out.println(skillsToSave);
+        
+        for (int i = 0; i < qualities.size(); i++) {
+            qualitiesToSave += qualities.get(i).prepareForDB() + ";";
+        }
+        
+        System.out.println(qualitiesToSave);
+        
+        for (int i = 0; i < contacts.size(); i++) {
+            contactsToSave += contacts.get(i).prepareForDB();
+        }
+        
+        System.out.println(contactsToSave);
+    }
+    void loadFromDB() {
+        player = "David";
+        name = "Kel";
+        
+        //Test strings for DB
+        String skillsFromDB = "a:3;b:5;";
+        String skillsTemp[] = skillsFromDB.split(";");
+        String qualitiesFromDB = "ab:qwerty:true;cd:password:false;";
+        String qualitiesTemp[] = qualitiesFromDB.split(";");
+        
+        
+        
+        
+        for (int i = 0; i < skillsTemp.length; i++) {
+            String temp[] = skillsTemp[i].split(":");
+            Skill skilltemp = new Skill(temp[0], Integer.parseInt(temp[1]));
+            this.skills.add(skilltemp);
+        }
+        
+        for (int i = 0; i < qualitiesTemp.length; i++) {
+            String temp[] = qualitiesTemp[i].split(":");
+            Quality qualitytemp = new Quality(temp[0], temp[1], Boolean.parseBoolean(temp[2]));
+            this.qualities.add(qualitytemp);
+        }
+    }
+    
+     /*******************************************************
+     **************** Getters and Setters *******************
+     *******************************************************/
+   
     public String getPlayer() {
         return player;
     }
@@ -151,22 +298,5 @@ public class Character {
     public void setEdge(Integer edge) {
         this.edge = edge;
     }
-    
-    void createCharacter() {
-        Scanner user_input = new Scanner( System.in );
-        
-        System.out.print("What is your name? ");
-        this.player = user_input.nextLine();
-        
-    }
-    
-    void saveToDB() {
-        String skillsToSave = "";
-        
-        for (int i = 0; i < skills.size(); i++) {
-            skillsToSave += skills.get(i).prepareForDB() + ";";
-        }
-        
-//        System.out.println(skillsToSave);
-    }
+
 }

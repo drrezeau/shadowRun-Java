@@ -10,8 +10,26 @@ package shadowrun;
  * @author David
  */
 public class Contacts {
-    String name;
-    int loyalty;
-    int connection;
+    private String name;
+    private int loyalty;
+    private int connection;
+    private String favor;
+    
+    
+    Contacts(String name, int loyalty, int connection, String favor) {
+        this.name = name;
+        this.loyalty = loyalty;
+        this.connection = connection;
+        this.favor = favor;
+    }
+    
+    void display() {
+        System.out.println("Contact: " + name + " | Loyalty: " + loyalty + " | Connection: " 
+                            + connection + " | Favor:" + favor);
+    }
+    
+    String prepareForDB() {
+        return name + ":" + loyalty + ":" + connection + ":" + favor;
+    }
     
 }

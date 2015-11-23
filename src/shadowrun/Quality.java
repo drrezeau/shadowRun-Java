@@ -10,7 +10,21 @@ package shadowrun;
  * @author c
  */
 public class Quality {
-    String name;
-    String note;
-    boolean positive;
+    private String name;
+    private String note;
+    private boolean positive;
+    
+    Quality(String name, String note, boolean positive) {
+        this.name = name;
+        this.note = note;
+        this.positive = positive;
+    }
+    
+    String prepareForDB() {
+        return name + ":" + note + ":" + positive;
+    }
+    
+    void display() {
+        System.out.println("Quality: " + name + " | Notes: " + note + " | " + positive);
+    }
 }
