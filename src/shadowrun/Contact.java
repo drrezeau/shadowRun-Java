@@ -9,14 +9,14 @@ package shadowrun;
  *
  * @author David
  */
-public class Contacts {
+public class Contact {
     private String name;
     private int loyalty;
     private int connection;
     private String favor;
     
     
-    Contacts(String name, int loyalty, int connection, String favor) {
+    Contact(String name, int loyalty, int connection, String favor) {
         this.name = name;
         this.loyalty = loyalty;
         this.connection = connection;

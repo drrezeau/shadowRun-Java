@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author c
+ * @author David
  */
 public class ShadowRun {
 
@@ -69,6 +69,12 @@ public class ShadowRun {
                 case 5:
                     myCharacter.displayQualities();
                     break;
+                case 6:
+                    myCharacter.addNewContact();
+                    break;
+                case 7:
+                    myCharacter.displayContacts();
+                    break;
                 case 15:
                     myCharacter.saveToDB();
                     break;
@@ -93,8 +99,10 @@ public class ShadowRun {
         System.out.println("\n1.Display Character Stats");
         System.out.println("2.Add New Skill");
         System.out.println("3.Show Skills");
-        System.out.println("4.Add Quality");
+        System.out.println("4.Add New Quality");
         System.out.println("5.Show Qualities");
+        System.out.println("6.Add New Contact");
+        System.out.println("7.Show Contacts");
         System.out.println("15.Save to DB");
     }
 }
