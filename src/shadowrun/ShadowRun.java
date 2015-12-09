@@ -16,9 +16,6 @@ import java.util.Scanner;
  */
 public class ShadowRun {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         Scanner user_input = new Scanner( System.in );
         
@@ -67,20 +64,16 @@ public class ShadowRun {
                     myCharacter.displayCharacter();
                     break;
                 case 2:
-                    myCharacter.addNewSkill();
-//                    System.out.println(myCharacter.getPlayer());
+                    manageSkills(myCharacter);
                     break;
                 case 3:
-                    myCharacter.displaySkills();
-                    break;
-                case 4:
                     manageQualities(myCharacter);
                     break;
-                case 6:
-                    myCharacter.addNewContact();
+                case 4:
+                    manageContacts(myCharacter);
                     break;
-                case 7:
-                    myCharacter.displayContacts();
+                case 5:
+                    manageMeleeWeapons(myCharacter);
                     break;
                 case 15:
                     myCharacter.saveToDB();
@@ -93,10 +86,11 @@ public class ShadowRun {
                 }
             }
         } while(command != 0);
-        // TODO code application logic here
     }
  
-    
+    /******************************************************
+    /******************** Main Menu ***********************
+    /******************************************************/
     static void mainMenu() {
         System.out.println("1.Create new Character");
         System.out.println("2.Load Character");
@@ -104,14 +98,47 @@ public class ShadowRun {
     }
     static void characterMenu() {
         System.out.println("\n1.Display Character Stats");
-        System.out.println("2.Add New Skill");
-        System.out.println("3.Show Skills");
-        System.out.println("4.Manage Qualities");
-        System.out.println("6.Add New Contact");
-        System.out.println("7.Show Contacts");
+        System.out.println("2.Manage Skills");
+        System.out.println("3.Manage Qualities");
+        System.out.println("4.Manage Contacts");
+        System.out.println("5.Manage Melee Weapons");
         System.out.println("15.Save to DB");
+        System.out.println("0.Close Program");
     }
     
+    /******************************************************
+    /***************** Individual Menus *******************
+    /******************************************************/
+    static void manageSkills(Character myCharacter) {
+        Scanner user_input = new Scanner( System.in );
+        int command;
+        
+        do {
+            System.out.println("\n1.Show Skills");
+            System.out.println("2.Add Skill");
+            System.out.println("3.Delete Skill");
+            System.out.println("0.Go Back to Menu");
+            
+            System.out.println("\nWhat would you like to do?");
+            System.out.print(">");
+            command = Integer.parseInt(user_input.next());
+            
+            switch(command) {
+                case 1:
+                    myCharacter.displaySkills();
+                    break;
+                case 2:
+                    myCharacter.addNewSkill();
+                    break;
+                case 3:
+                    myCharacter.deleteSkill();
+                    break;
+                default:
+                    command = 0;
+                    break;
+            }
+        } while (command != 0);
+    }
     static void manageQualities(Character myCharacter) {
         Scanner user_input = new Scanner( System.in );
         int command;
@@ -120,6 +147,7 @@ public class ShadowRun {
             System.out.println("\n1.Display Qualities");
             System.out.println("2.Add Quality");
             System.out.println("3.Delete Quality");
+            System.out.println("0.Back to Character Menu");
             
             System.out.println("\nWhat would you like to do?");
             System.out.print(">");
@@ -135,11 +163,81 @@ public class ShadowRun {
                 case 3:
                     myCharacter.deleteQuality();
                     break;
+                default:
+                    command = 0;
+                    break;
             }
         } while(command != 0);
     }
+    static void manageContacts(Character myCharacter) {
+        Scanner user_input = new Scanner( System.in );
+        int command;
+        
+        do {
+            System.out.println("\n1.Show Contacts");
+            System.out.println("2.Add Contact");
+            System.out.println("3.Delete Contact");
+            System.out.println("0.Go Back to Menu");
+            
+            System.out.println("\nWhat would you like to do?");
+            System.out.print(">");
+            command = Integer.parseInt(user_input.next());
+            
+            switch(command) {
+                case 1:
+                    myCharacter.displayContacts();
+                    break;
+                case 2:
+                    myCharacter.addNewContact();
+                    break;
+                case 3:
+                    myCharacter.deleteContact();
+                    break;
+                default:
+                    command = 0;
+                    break;
+            }
+        } while (command != 0);        
+    }
+    static void manageMeleeWeapons(Character myCharacter) {
+        Scanner user_input = new Scanner( System.in );
+        int command;
+        
+        do {
+            System.out.println("\n1.Show Melee Weapons");
+            System.out.println("2.Add Melee Weapon");
+            System.out.println("3.Delete Melee Weapon");
+            System.out.println("0.Go Back to Menu");
+            
+            System.out.println("\nWhat would you like to do?");
+            System.out.print(">");
+            command = Integer.parseInt(user_input.next());
+            
+            switch(command) {
+                case 1:
+                    myCharacter.displayMeleeWeapons();
+                    break;
+                case 2:
+                    myCharacter.addNewMeleeWeapon();
+                    break;
+                case 3:
+                    myCharacter.deleteMeleeWeapon();
+                    break;
+                default:
+                    command = 0;
+                    break;
+            }
+        } while (command != 0); 
+    }
+    static void manageRangedWeapons(Character myCharacter) {
+        //TODO
+    }
     
+    /******************************************************
+    /********** Display Current Characters in DB **********
+    /******************************************************/
     static boolean displayDBCharacters() {
+        System.out.println("Displaying possible characters... Please Wait.");
         Connection conn = Character.makeConn();
         try {
             Statement stt = conn.createStatement();

@@ -32,4 +32,8 @@ public class Contact {
         return name + ":" + loyalty + ":" + connection + ":" + favor;
     }
     
+    String getName() {
+        return this.name;
+    }
+    
 }

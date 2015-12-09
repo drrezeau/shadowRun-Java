@@ -44,12 +44,13 @@ public class Character {
     private boolean hasMagic;
     private Integer magic;
     
-    private ArrayList<Skill> skills;
-    private ArrayList<Quality> qualities;
-    private ArrayList<Contact> contacts;
-    private ArrayList<MeleeWeapons> meleeWeapons;
-    private ArrayList<RangedWeapon> rangedWeapons;
-    private ArrayList<Armor> armor;
+    //The different things to remember for a character
+    final private ArrayList<Skill> skills;
+    final private ArrayList<Quality> qualities;
+    final private ArrayList<Contact> contacts;
+    final private ArrayList<MeleeWeapon> meleeWeapons;
+    final private ArrayList<RangedWeapon> rangedWeapons;
+    final private ArrayList<Armor> armor;
 
     private boolean characterLoaded = false;
     
@@ -62,7 +63,7 @@ public class Character {
         armor = new ArrayList();
     }
     
-    
+    //Takes the user through the creation process
     void createCharacter() {
         Scanner user_input = new Scanner( System.in );
         
@@ -117,6 +118,7 @@ public class Character {
     /*******************************************************
      *********** Functions for Adding new Traits ***********
      *******************************************************/
+    //Scanner user_input = new Scanner( System.in );
     void addNewSkill() {
         Scanner user_input = new Scanner( System.in );
         
@@ -188,18 +190,60 @@ public class Character {
         Contact contact = new Contact(name, loyalty, connection, favor);
         contacts.add(contact);
     }
+    void addNewMeleeWeapon() {
+        Scanner user_input = new Scanner( System.in );
+        
+        String name;
+        int reach, damage, acc, ap;
+        System.out.println("What Melee Weapon would you like to add");
+        System.out.print(">");
+        name = user_input.nextLine();
+        
+        System.out.println("What is the Reach of the weapon?");
+        System.out.print(">");
+        reach = Integer.parseInt(user_input.nextLine());
+
+        System.out.println("What is the damage of the weapon?");
+        System.out.print(">");
+        damage = Integer.parseInt(user_input.nextLine());
+
+        System.out.println("What is the accuracy of the weapon?");
+        System.out.print(">");
+        acc =  Integer.parseInt(user_input.nextLine());
+
+        System.out.println("What is the armor piercing of the weapon?");
+        System.out.print(">");
+        ap =  Integer.parseInt(user_input.nextLine());
+        
+        MeleeWeapon mw = new MeleeWeapon(name, reach, damage, acc, ap);
+         meleeWeapons.add(mw);
+    }
     
     /*******************************************************
      *********** Functions for Adding new Traits ***********
      *******************************************************/
     void deleteSkill() {
        //TODO
+       Scanner user_input = new Scanner( System.in );
+       
+       String skillName;
+       
+       System.out.println("What skill would you like to delete?");
+       System.out.print(">");
+       skillName = user_input.nextLine();
+       
+       for (int i = 0; i < skills.size(); i++) {
+           if (skillName.equals(skills.get(i).getSkill())) {
+               skills.remove(i);
+               break;
+           }
+       }
     }
     void deleteQuality() {
         Scanner user_input = new Scanner( System.in );
         
         String qualityName;
-        System.out.println("What qaulity would you like to delete?");
+        System.out.println("What quality would you like to delete?");
         System.out.print(">");
         qualityName = user_input.nextLine();
         for (int i = 0; i < qualities.size(); i++) {
@@ -213,7 +257,36 @@ public class Character {
         //TODO
      }
     void deleteContact() {
-        //TODO
+        Scanner user_input = new Scanner( System.in );
+        
+        String contactName;
+        
+        System.out.println("What contact would you like to delete?");
+        System.out.print(">");
+        contactName = user_input.nextLine();
+        
+        for (int i = 0; i < contacts.size(); i++) {
+            if (contactName.equals(contacts.get(i).getName())) {
+                contacts.remove(i);
+                break;
+            }
+        }
+    }
+    void deleteMeleeWeapon() {
+        Scanner user_input = new Scanner( System.in );
+        
+        String meleeWeapon;
+        
+        System.out.println("What melee weapon would you like to delete?");
+        System.out.print(">");
+        meleeWeapon = user_input.nextLine();
+        
+        for (int i = 0; i < meleeWeapons.size(); i++) {
+            if (meleeWeapon.equals(meleeWeapons.get(i).getName())) {
+                contacts.remove(i);
+                break;
+            }
+        }
     }
     
     /*******************************************************
@@ -239,6 +312,12 @@ public class Character {
         }
         System.out.println();
     }
+    void displayMeleeWeapons() {
+        for (int i = 0; i < meleeWeapons.size(); i++) {
+            meleeWeapons.get(i).display();
+        }
+        System.out.println();
+    }
         
     void displayCharacter() {
         System.out.println("Player's Name: " + this.player);
@@ -257,6 +336,7 @@ public class Character {
         System.out.println("--- CONTACTS ---");
         this.displayContacts();
         System.out.println("--- MELEE WEAPONS ---");
+        this.displayMeleeWeapons();
         System.out.println("--- RANGED WEAPONS ---");
         System.out.println("--- ARMOR ---");
         System.out.println("--- ITEMS ---");
@@ -278,6 +358,8 @@ public class Character {
 //    static final String PASS = "root"; //**Local
     
     void saveToDB() {
+        System.out.println("Saving to Database... Please Wait.");
+        
         String skillsToSave = "";
         String qualitiesToSave = "";
         String contactsToSave = "";
@@ -286,24 +368,33 @@ public class Character {
         String rangedWeaponsToSave = "";
         String itemsToSave = "";
         
+        //Create the string to save for skills
         for (int i = 0; i < skills.size(); i++) {
             skillsToSave += skills.get(i).prepareForDB() + ";";
         }
 //        System.out.println(skillsToSave);
         
+        //Create the string to save for qualities
         for (int i = 0; i < qualities.size(); i++) {
             qualitiesToSave += qualities.get(i).prepareForDB() + ";";
         }
 //        System.out.println(qualitiesToSave);
         
+        //Create the string to save for contacts
         for (int i = 0; i < contacts.size(); i++) {
             contactsToSave += contacts.get(i).prepareForDB() + ";";
         }
 //        System.out.println(contactsToSave);
 
+        for (int i = 0; i < meleeWeapons.size(); i++) {
+            meleeWeaponsToSave += meleeWeapons.get(i).prepareForDB() + ";";
+        }
+
         String sql = new String();
         Connection conn = makeConn();
         
+        
+        //The SQL String needed to update the database
         if (this.characterLoaded) { //updating a character already in the DB
             sql = "UPDATE characters SET player='" + this.player + "', characterName='" + this.name + "', alias='" + this.alias 
                     + "', age=" +this.age + ", height=" + this.height + ", weight=" + this.weight + ", metatype='" + this.metatype 
@@ -330,8 +421,10 @@ public class Character {
             e.printStackTrace();
             System.exit(0);
         }
+        System.out.println("Done Saving to Database.");
     }
     boolean loadFromDB() {
+        //Creating the variables to put strings that need to be parsed
         this.characterLoaded = true;
         String skillsFromDB = new String();
         String skillsTemp[];
@@ -339,10 +432,10 @@ public class Character {
         String qualitiesTemp[];
         String contactsFromDB = new String();
         String contactsTemp[];
+        String meleeWeaponsFromDB = new String();
+        String meleeWeaponsTemp[];
 
-        
-        
-        
+        //Lets the user pick which character to load from the database
         Scanner user_input = new Scanner( System.in );
         String characterName;
         System.out.println("What character do you wish to load?");
@@ -350,33 +443,35 @@ public class Character {
         characterName = user_input.nextLine();
         
         Connection conn = makeConn();
-//        System.out.println("Creating statement...");
+        System.out.println("Loading Character... Please Wait.");
+
         try {
             Statement stmt = conn.createStatement();
             String sql;
             sql = "SELECT * FROM characters WHERE characterName='"+characterName+"'";
             ResultSet rs = stmt.executeQuery(sql);
             
+            //If the character requested is not found in the DB
             if (!rs.isBeforeFirst()) {
                 System.out.println("No Character by that name.");
                 return false;
             } 
-            while (rs.next()) {
-                //Gather all the variables and save them into their spots
-//                System.out.println(rs.getString("player"));
-                this.player = rs.getString("player");
-                this.name = rs.getString("characterName");
-                this.alias = rs.getString("alias");
-                this.age = rs.getInt("age");
-                this.height = rs.getInt("height");
-                this.weight = rs.getInt("weight");
-                this.sex = rs.getString("sex");
-                this.metatype = rs.getString("metatype");
-                skillsFromDB = rs.getString("skills");
-                qualitiesFromDB = rs.getString("qualities");
-                contactsFromDB = rs.getString("contacts");
-                
-            }
+            
+            rs.next();
+            
+            //Gather all the variables and save them into their spots
+            this.player = rs.getString("player");
+            this.name = rs.getString("characterName");
+            this.alias = rs.getString("alias");
+            this.age = rs.getInt("age");
+            this.height = rs.getInt("height");
+            this.weight = rs.getInt("weight");
+            this.sex = rs.getString("sex");
+            this.metatype = rs.getString("metatype");
+            skillsFromDB = rs.getString("skills");
+            qualitiesFromDB = rs.getString("qualities");
+            contactsFromDB = rs.getString("contacts");
+            meleeWeaponsFromDB = rs.getString("meleeWeapons");
             
             rs.close();
             stmt.close();
@@ -387,6 +482,7 @@ public class Character {
         }
         
         //Parsing through the Strings to save into the vectors
+            //Skills
         if (!(skillsFromDB.isEmpty())) {
             skillsTemp = skillsFromDB.split(";");
             
@@ -396,7 +492,7 @@ public class Character {
                 this.skills.add(skilltemp);
             }
         }
-//        System.out.println(qualitiesFromDB.isEmpty());
+            //Qualities
         if (!(qualitiesFromDB.isEmpty())) {
             qualitiesTemp = qualitiesFromDB.split(";");
             
@@ -406,6 +502,7 @@ public class Character {
                 this.qualities.add(qualitytemp);
             }
         }
+            //Contacts
         if (!(contactsFromDB.isEmpty())) {
             contactsTemp = contactsFromDB.split(";");
             
@@ -419,11 +516,24 @@ public class Character {
                 }
                 this.contacts.add(contactTemp);
             }
-        }       
+        }
+        
+        if (!(meleeWeaponsFromDB.isEmpty())) {
+            meleeWeaponsTemp = meleeWeaponsFromDB.split(";");
+            
+            for (int i = 0; i < meleeWeaponsTemp.length; i++) {
+                String temp[] = meleeWeaponsTemp[i].split(":");
+                
+                MeleeWeapon mw = new MeleeWeapon(temp[0],Integer.parseInt(temp[1]),Integer.parseInt(temp[2]),
+                        Integer.parseInt(temp[3]),Integer.parseInt(temp[4]));
+                this.meleeWeapons.add(mw);
+            }
+        }
         return true;
         
     }
    
+    //Creates a connectiong with the DB and returns it
     public static Connection makeConn() {
         Connection conn = null;
         try{
