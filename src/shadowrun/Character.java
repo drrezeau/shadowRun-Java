@@ -190,16 +190,27 @@ public class Character {
     }
     
     /*******************************************************
-    /*******************************************************
      *********** Functions for Adding new Traits ***********
      *******************************************************/
     void deleteSkill() {
        //TODO
     }
     void deleteQuality() {
-         String qualityName;
-         System.out.println("What qaulity would you like to delete?");
-         //TODO
+        Scanner user_input = new Scanner( System.in );
+        
+        String qualityName;
+        System.out.println("What qaulity would you like to delete?");
+        System.out.print(">");
+        qualityName = user_input.nextLine();
+        for (int i = 0; i < qualities.size(); i++) {
+//            System.out.println(qualities.get(i).getName() + " || " + qualityName);
+            if(qualityName.equals(qualities.get(i).getName())) {
+                qualities.remove(i);
+                break;
+            }
+        }
+        
+        //TODO
      }
     void deleteContact() {
         //TODO
@@ -320,7 +331,7 @@ public class Character {
             System.exit(0);
         }
     }
-    void loadFromDB() {
+    boolean loadFromDB() {
         this.characterLoaded = true;
         String skillsFromDB = new String();
         String skillsTemp[];
@@ -339,15 +350,20 @@ public class Character {
         characterName = user_input.nextLine();
         
         Connection conn = makeConn();
-        System.out.println("Creating statement...");
+//        System.out.println("Creating statement...");
         try {
             Statement stmt = conn.createStatement();
             String sql;
             sql = "SELECT * FROM characters WHERE characterName='"+characterName+"'";
             ResultSet rs = stmt.executeQuery(sql);
+            
+            if (!rs.isBeforeFirst()) {
+                System.out.println("No Character by that name.");
+                return false;
+            } 
             while (rs.next()) {
                 //Gather all the variables and save them into their spots
-                System.out.println(rs.getString("player"));
+//                System.out.println(rs.getString("player"));
                 this.player = rs.getString("player");
                 this.name = rs.getString("characterName");
                 this.alias = rs.getString("alias");
@@ -380,7 +396,7 @@ public class Character {
                 this.skills.add(skilltemp);
             }
         }
-        System.out.println(qualitiesFromDB.isEmpty());
+//        System.out.println(qualitiesFromDB.isEmpty());
         if (!(qualitiesFromDB.isEmpty())) {
             qualitiesTemp = qualitiesFromDB.split(";");
             
@@ -404,9 +420,11 @@ public class Character {
                 this.contacts.add(contactTemp);
             }
         }       
+        return true;
+        
     }
    
-    private static Connection makeConn() {
+    public static Connection makeConn() {
         Connection conn = null;
         try{
         //STEP 2: Register JDBC driver

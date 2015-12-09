@@ -27,4 +27,8 @@ public class Quality {
     void display() {
         System.out.println("Quality: " + name + " | Notes: " + note + " | " + positive);
     }
+    
+    String getName() {
+        return this.name;
+    }
 }

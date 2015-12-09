@@ -5,6 +5,9 @@
  */
 package shadowrun;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Scanner;
 
 /**
@@ -26,6 +29,7 @@ public class ShadowRun {
         boolean characterCreated = false;
         mainMenu();
         System.out.println("What would you like to do?");
+        System.out.print(">");
         command = Integer.parseInt(user_input.next());
         
         switch(command) {
@@ -35,8 +39,13 @@ public class ShadowRun {
 //                    System.out.println(myCharacter.getPlayer());
                     break;
                 case 2:
-                    myCharacter.loadFromDB();
-                    characterCreated = true;
+                    displayDBCharacters();
+                    characterCreated = myCharacter.loadFromDB();
+                    if (!characterCreated) {
+                        System.out.println("Creating new Character...");
+                        myCharacter.createCharacter();
+                        characterCreated = true;
+                    }
                     break;
                 default:
                     System.out.println("Not an option -- Leaving program.");
@@ -49,6 +58,7 @@ public class ShadowRun {
                 characterMenu();
             
             System.out.println("\nWhat would you like to do?");
+            System.out.print(">");
             command = Integer.parseInt(user_input.next());
             
             
@@ -64,10 +74,7 @@ public class ShadowRun {
                     myCharacter.displaySkills();
                     break;
                 case 4:
-                    myCharacter.addNewQuality();
-                    break;
-                case 5:
-                    myCharacter.displayQualities();
+                    manageQualities(myCharacter);
                     break;
                 case 6:
                     myCharacter.addNewContact();
@@ -99,10 +106,60 @@ public class ShadowRun {
         System.out.println("\n1.Display Character Stats");
         System.out.println("2.Add New Skill");
         System.out.println("3.Show Skills");
-        System.out.println("4.Add New Quality");
-        System.out.println("5.Show Qualities");
+        System.out.println("4.Manage Qualities");
         System.out.println("6.Add New Contact");
         System.out.println("7.Show Contacts");
         System.out.println("15.Save to DB");
+    }
+    
+    static void manageQualities(Character myCharacter) {
+        Scanner user_input = new Scanner( System.in );
+        int command;
+        
+        do {
+            System.out.println("\n1.Display Qualities");
+            System.out.println("2.Add Quality");
+            System.out.println("3.Delete Quality");
+            
+            System.out.println("\nWhat would you like to do?");
+            System.out.print(">");
+            command = Integer.parseInt(user_input.next());
+            
+            switch(command) {
+                case 1:
+                    myCharacter.displayQualities();
+                    break;
+                case 2:
+                    myCharacter.addNewQuality();
+                    break;
+                case 3:
+                    myCharacter.deleteQuality();
+                    break;
+            }
+        } while(command != 0);
+    }
+    
+    static boolean displayDBCharacters() {
+        Connection conn = Character.makeConn();
+        try {
+            Statement stt = conn.createStatement();
+            String sql = "SELECT characterName FROM characters";
+            
+            ResultSet set = stt.executeQuery(sql);
+            if (!set.isBeforeFirst()) {
+                System.out.println("No Characters in Database.");
+                return true;
+            }
+            
+            while(set.next()) {
+                String name = set.getString("characterName");
+                System.out.println("-" + name);
+            }
+        } catch(Exception E) {
+            E.printStackTrace();
+        }
+        
+        
+        return false;
     }
 }
